@@ -1,0 +1,398 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// Bootstrap Icons
+@import 'bootstrap-icons/font/bootstrap-icons';
+
+// Custom Global Styles
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: $dark;
+    letter-spacing: -0.025em;
+}
+
+// ------------------------------
+// Buttons
+// ------------------------------
+.btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+
+    &-primary {
+        background-color: $primary;
+        border-color: $primary;
+
+        &:hover {
+            background-color: lighten($primary, 5%);
+            border-color: lighten($primary, 5%);
+        }
+    }
+
+    &-success {
+        background-color: $success;
+        border-color: $success;
+        color: white;
+    }
+}
+
+// ------------------------------
+// Cards
+// ------------------------------
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: $box-shadow-sm;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
+
+    &-header {
+        background-color: #fff;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        font-weight: 600;
+        color: $dark;
+    }
+
+    &-body {
+        padding: 1.5rem;
+    }
+
+    // Hover effect for interactive cards
+    &.hover-card:hover {
+        transform: translateY(-2px);
+        box-shadow: $box-shadow;
+    }
+}
+
+// ------------------------------
+// Stats Cards (Dashboard)
+// ------------------------------
+// Map colors to stats types
+$stats-colors: (
+    'primary': $primary,
+    'success': $success,
+    'warning': $warning,
+    'danger': $danger,
+    'info': $info
+);
+
+.stats-card {
+    cursor: pointer;
+    border-left: 4px solid transparent; // subtle indicator
+
+    .card-body {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    // Generate color variants
+    @each $name, $color in $stats-colors {
+        &.card-#{$name} {
+            // border-left-color: $color;
+
+            .icon-box {
+                background-color: rgba($color, 0.1);
+                color: $color;
+            }
+
+            &:hover {
+                background-color: rgba($color, 0.02);
+
+                .icon-box {
+                    background-color: $color;
+                    color: white;
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+}
+
+// ------------------------------
+// Tables
+// ------------------------------
+.table-clean {
+    thead th {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 1rem;
+    }
+
+    tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        color: #475569;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.875rem;
+    }
+
+    tbody tr:hover {
+        background-color: rgba($primary, 0.02);
+    }
+}
+
+// ------------------------------
+// Badges / Status Indicators
+// ------------------------------
+.badge-status {
+    padding: 0.5em 1em;
+    border-radius: 6px; // Slightly less rounded for a more structured look, or keep pill
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    min-width: 100px; // Ensure a minimum width to reduce "scattered" look
+    border: 1px solid transparent; // ready for colored borders
+
+    &.ongoing {
+        background-color: rgba($info, 0.15);
+        color: darken($info, 10%);
+        border-color: rgba($info, 0.2);
+    }
+
+    &.completed {
+        background-color: rgba($success, 0.15);
+        color: darken($success, 10%);
+        border-color: rgba($success, 0.2);
+    }
+
+    &.suspended {
+        background-color: rgba($danger, 0.15);
+        color: darken($danger, 10%);
+        border-color: rgba($danger, 0.2);
+    }
+
+    &.operation {
+        background-color: rgba($primary, 0.15);
+        color: darken($primary, 10%);
+        border-color: rgba($primary, 0.2);
+    }
+
+    &.pending {
+        background-color: rgba($warning, 0.15);
+        color: darken($warning, 20%);
+        border-color: rgba($warning, 0.2);
+    }
+
+    &.planned {
+        background-color: rgba(#4f46e5, 0.15);
+        color: #4f46e5;
+        border-color: rgba(#4f46e5, 0.2);
+    }
+
+    // Tracking specific status
+    &.moving_forward {
+        background-color: #dcfce7; // green-100
+        color: #166534; // green-800
+        border-color: #bbf7d0; // green-200
+    }
+
+    &.in_progress {
+        background-color: #fef9c3; // yellow-100
+        color: #854d0e; // yellow-800
+        border-color: #fde047; // yellow-300
+    }
+
+    &.no_progress {
+        background-color: #fee2e2; // red-100
+        color: #991b1b; // red-800
+        border-color: #fecaca; // red-200
+    }
+}
+
+// ------------------------------
+// Forms
+// ------------------------------
+.form-control {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    color: #1e293b;
+
+    &::placeholder {
+        color: #94a3b8;
+    }
+}
+
+.form-label {
+    font-weight: 500;
+    color: #334155;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+// File Upload Zone
+.upload-zone {
+    border: 2px dashed #cbd5e1;
+    border-radius: $border-radius-lg;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    background-color: #f8fafc;
+    cursor: pointer;
+
+    &:hover,
+    &.dragover {
+        border-color: $primary;
+        background-color: rgba($primary, 0.02);
+    }
+
+    i {
+        font-size: 2rem;
+        color: #94a3b8;
+        margin-bottom: 1rem;
+    }
+}
+
+// ------------------------------
+// Skeleton Loaders
+// ------------------------------
+.skeleton {
+    background-color: #e2e8f0;
+    background-image: linear-gradient(90deg,
+            rgba(#fff, 0),
+            rgba(#fff, 0.5),
+            rgba(#fff, 0));
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    line-height: 1;
+    width: 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+// ------------------------------
+// Dark Mode Foundation
+// ------------------------------
+[data-bs-theme="dark"] {
+    --bs-body-bg: #0f172a;
+    --bs-body-color: #f8fafc;
+    --bs-card-bg: #1e293b;
+    --bs-card-border-color: rgba(255, 255, 255, 0.1);
+
+    body {
+        background-color: var(--bs-body-bg);
+        color: var(--bs-body-color);
+    }
+
+    .card {
+        background-color: var(--bs-card-bg);
+        border-color: var(--bs-card-border-color);
+
+        &-header {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-bottom-color: var(--bs-card-border-color);
+        }
+    }
+
+    .navbar-landing {
+        background-color: #1e293b !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        .navbar-brand,
+        .nav-link {
+            color: #f8fafc !important;
+        }
+    }
+
+    .sidebar-card,
+    .map-card {
+        background-color: #1e293b !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .sidebar-header {
+        background-color: #1e293b !important;
+        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .project-item {
+        background-color: #334155 !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+
+        h4 {
+            color: #f8fafc !important;
+        }
+    }
+
+    .bg-light {
+        background-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+
+    .text-dark {
+        color: #f8fafc !important;
+    }
+
+    .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    .table-clean {
+        thead th {
+            background-color: #334155 !important;
+            color: #f8fafc !important;
+            border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        tbody td {
+            color: #cbd5e1 !important;
+            border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+    }
+
+    footer {
+        background-color: #0f172a !important;
+        border-top-color: rgba(255, 255, 255, 0.1) !important;
+    }
+}
