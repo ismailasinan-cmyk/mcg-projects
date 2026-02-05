@@ -1084,7 +1084,7 @@
                         document.querySelector('.slide-nav-btn').parentElement.style.display = 'flex';
                     } else if (project.image) {
                         // Fallback partial support for old single image field
-                         wrapper.innerHTML = `<div class="slide slide-fade" style="display:block"><img src="/images/projects/${project.image}" alt="${project.name}"></div>`;
+                         wrapper.innerHTML = `<div class="slide slide-fade" style="display:block"><img src="/storage/images/projects/${project.image}" alt="${project.name}"></div>`;
                          document.getElementById('slide-dots').innerHTML = '';
                          document.querySelector('.slide-nav-btn').parentElement.style.display = 'none'; 
                     } else {
@@ -1155,7 +1155,7 @@
 
             wrapper.innerHTML = `
                 <div class="slide ${animClass}" style="display:block;">
-                    <img src="/${img.image_path}" alt="Project Image">
+                    <img src="/storage/${img.image_path}" alt="Project Image">
                     ${img.caption ? `<div class="image-caption">${img.caption}</div>` : ''}
                 </div>
             `;
