@@ -26,7 +26,8 @@ class Project extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? \Illuminate\Support\Facades\Storage::url('images/projects/' . $this->image) : null;
+        // Images are stored in public/images/projects/, not in storage
+        return $this->image ? asset('images/projects/' . $this->image) : null;
     }
 
     // Relationship with project images
