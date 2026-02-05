@@ -26,8 +26,19 @@ class Project extends Model
 
     public function getImageUrlAttribute()
     {
-        // Images are stored in public/images/projects/, not in storage
-        return $this->image ? asset('images/projects/' . $this->image) : null;
+        if (!$this->image) {
+            return null;
+        }
+        
+        $path = 'images/projects/' . $this->image;
+        
+        // Check if image exists in public folder (legacy/committed images)
+        if (file_exists(public_path($path))) {
+            return asset($path);
+        }
+        
+        // Fall back to Storage::url() for cloud-uploaded images
+        return \Illuminate\Support\Facades\Storage::url($path);
     }
 
     // Relationship with project images
