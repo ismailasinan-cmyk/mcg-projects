@@ -22,6 +22,13 @@ class Project extends Model
         'awarded_at' => 'date',
     ];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? \Illuminate\Support\Facades\Storage::url('images/projects/' . $this->image) : null;
+    }
+
     // Relationship with project images
     public function images()
     {

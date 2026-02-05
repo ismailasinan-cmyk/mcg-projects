@@ -11,6 +11,13 @@ class ProjectImage extends Model
 
     protected $fillable = ['project_id', 'image_path', 'caption', 'order'];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return \Illuminate\Support\Facades\Storage::url($this->image_path);
+    }
+
     public function project()
     {
         return $this->belongsTo(Project::class);

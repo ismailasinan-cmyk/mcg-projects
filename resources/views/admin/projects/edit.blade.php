@@ -101,7 +101,7 @@
                                         <div class="col-md-4 col-sm-6" id="image-card-{{ $image->id }}">
                                             <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
                                                 <div class="position-relative">
-                                                    <img src="{{ asset('storage/' . $image->image_path) }}" 
+                                                    <img src="{{ Storage::url($image->image_path) }}" 
                                                         class="card-img-top object-fit-cover" 
                                                         style="height: 140px; width: 100%;">
                                                     <div class="position-absolute top-0 end-0 p-2">

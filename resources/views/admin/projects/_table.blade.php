@@ -32,10 +32,10 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3 position-relative">
                                         @if($project->images->count() > 0)
-                                            <img src="{{ asset('storage/' . $project->images->first()->image_path) }}" alt="{{ $project->name }}"
+                                            <img src="{{ Storage::url($project->images->first()->image_path) }}" alt="{{ $project->name }}"
                                                 class="rounded-3 object-fit-cover shadow-sm border" style="width: 44px; height: 44px;">
                                         @elseif($project->image)
-                                            <img src="{{ asset('storage/images/projects/' . $project->image) }}" alt="{{ $project->name }}"
+                                            <img src="{{ Storage::url('images/projects/' . $project->image) }}" alt="{{ $project->name }}"
                                                 class="rounded-3 object-fit-cover shadow-sm border" style="width: 44px; height: 44px;">
                                         @else
                                             <div class="rounded-3 bg-light d-flex align-items-center justify-content-center text-muted border" style="width: 44px; height: 44px;">
