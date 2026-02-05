@@ -15,6 +15,9 @@ npm run build
 # 4. Run Migrations
 php artisan migrate --force
 
+# 5. Link Storage
+php artisan storage:link
+
 # 5. Optimize Configuration
 php artisan config:cache
 php artisan route:cache
