@@ -26,19 +26,17 @@ class Project extends Model
 
     public function getImageUrlAttribute()
     {
-        if (!$this->image) {
-            return null;
-        }
+        if (!$this->image) return null;
         
         $path = 'images/projects/' . $this->image;
         
-        // Check if image exists in public folder (legacy/committed images)
-        if (file_exists(public_path($path))) {
-            return asset($path);
+        // Check if file exists on the public disk (storage/app/public)
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
         }
         
-        // Fall back to Storage::url() for cloud-uploaded images
-        return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+        // Fallback to public asset (public/images/projects/...)
+        return asset($path);
     }
 
     // Relationship with project images
