@@ -30,13 +30,13 @@ class Project extends Model
         
         $path = 'images/projects/' . $this->image;
         
-        // Check if file exists in the physical public directory (legacy/seed images)
+        // If file exists in public/ (Git-committed legacy files)
         if (file_exists(public_path($path))) {
             return secure_asset($path);
         }
         
-        // Fallback to storage
-        return secure_asset('storage/' . $path);
+        // Fallback to our proxy route at /storage/{path}
+        return secure_url('storage/' . $path);
     }
 
     // Relationship with project images

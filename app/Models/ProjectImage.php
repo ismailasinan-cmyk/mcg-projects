@@ -19,14 +19,13 @@ class ProjectImage extends Model
 
         $path = ltrim($this->image_path, '/');
 
-        // Check if file exists in the physical public directory (legacy/seed images)
+        // If file exists in public/ (Git-committed legacy files)
         if (file_exists(public_path($path))) {
             return secure_asset($path);
         }
 
-        // Fallback to storage - using secure_asset handles potential symlink issues better
-        // if the file is in public/storage, secure_asset('storage/'.$path) works perfectly.
-        return secure_asset('storage/' . $path);
+        // Fallback to our proxy route at /storage/{path}
+        return secure_url('storage/' . $path);
     }
 
     public function project()

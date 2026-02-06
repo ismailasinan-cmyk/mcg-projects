@@ -8,6 +8,7 @@ use App\Http\Controllers\PasswordController;
 // Public routes
 Route::get('/', [ProjectController::class, 'showMap'])->name('home');
 Route::get('/debug-images', [\App\Http\Controllers\DebugController::class, 'debugImages']);
+Route::get('/storage/{path}', [\App\Http\Controllers\FileController::class, 'serve'])->where('path', '.*');
 
 // Auth routes
 Auth::routes();
