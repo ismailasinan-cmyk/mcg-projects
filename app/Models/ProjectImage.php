@@ -21,7 +21,7 @@ class ProjectImage extends Model
         }
         
         // Fall back to Storage::url() for cloud-uploaded images
-        return \Illuminate\Support\Facades\Storage::url($this->image_path);
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->image_path);
     }
 
     public function project()

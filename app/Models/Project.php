@@ -38,7 +38,7 @@ class Project extends Model
         }
         
         // Fall back to Storage::url() for cloud-uploaded images
-        return \Illuminate\Support\Facades\Storage::url($path);
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
     }
 
     // Relationship with project images
