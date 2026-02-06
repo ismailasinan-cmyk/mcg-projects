@@ -14,7 +14,7 @@ class ProjectController extends Controller
     public function __construct(\App\Services\ProjectService $projectService)
     {
         $this->projectService = $projectService;
-        $this->middleware('auth')->except(['showMap', 'getByState', 'getProject', 'getStatistics', 'getStatesWithProjects']);
+        $this->middleware('auth')->except(['showMap', 'getByState', 'getProject', 'getStatistics', 'getStatesWithProjects', 'getProjects']);
     }
 
     // Public map view (homepage)
