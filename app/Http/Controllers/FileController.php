@@ -17,6 +17,9 @@ class FileController extends Controller
             abort(404);
         }
 
-        return Storage::disk('public')->response($path);
+        return Storage::disk('public')->response($path, null, [
+            'Cache-Control' => 'public, max-age=2592000, immutable',
+            'Expires' => gmdate('D, d M Y H:i:s', time() + 2592000) . ' GMT',
+        ]);
     }
 }
