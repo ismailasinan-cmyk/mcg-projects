@@ -29,19 +29,21 @@ class Project extends Model
         if (!$this->image) return null;
         
         $path = 'images/projects/' . $this->image;
-        $isProduction = config('app.env') === 'production';
         
-        // Check if file exists in the public directory directly
+        // Check if file exists in the physical public directory (legacy/seed images)
         if (file_exists(public_path($path))) {
-            return $isProduction ? secure_asset($path) : asset($path);
+            $url = asset($path);
+        } else {
+            // Assume it's in storage (new uploads)
+            $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
         }
         
-        // Otherwise assume it's in storage
-        if ($isProduction) {
-            return secure_url('storage/' . $path);
+        // Hard-force HTTPS in production to fix Mixed Content
+        if (config('app.env') === 'production') {
+            return str_replace('http://', 'https://', $url);
         }
 
-        return asset('storage/' . $path);
+        return $url;
     }
 
     // Relationship with project images

@@ -22,10 +22,24 @@ class DebugController extends Controller
             'test_file_size' => File::exists(public_path($testPath)) ? File::size(public_path($testPath)) : 0,
             'test_file_perms' => File::exists(public_path($testPath)) ? substr(sprintf('%o', fileperms(public_path($testPath))), -4) : 'none',
             'test_file_in_storage' => Storage::disk('public')->exists($testPath),
-            'generated_asset_url' => asset($testPath),
-            'generated_storage_url' => Storage::disk('public')->url($testPath),
+            'model_logic_test' => (function($path) {
+                if (file_exists(public_path($path))) {
+                    $u = asset($path);
+                } else {
+                    $u = Storage::disk('public')->url($path);
+                }
+                return str_replace('http://', 'https://', $u);
+            })($testPath),
+            'example_projects' => \App\Models\Project::with('images')->take(3)->get()->map(function($p) {
+                return [
+                    'id' => $p->id,
+                    'name' => $p->name,
+                    'image_url' => $p->image_url,
+                    'images_count' => $p->images->count(),
+                    'first_image_url' => $p->images->first()?->image_url,
+                ];
+            }),
             'server_protocol' => isset($_SERVER['HTTPS']) ? 'https' : 'http',
-            'http_host' => $_SERVER['HTTP_HOST'] ?? 'unknown',
         ]);
     }
 }
