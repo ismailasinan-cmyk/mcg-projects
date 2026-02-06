@@ -235,6 +235,7 @@ class ProjectController extends Controller
             } catch (\Exception $e) {}
         }
         fclose($fileHandle);
+        $this->projectService->clearCaches();
 
         return redirect()->back()->with('success', "$importedCount projects imported successfully!");
     }
