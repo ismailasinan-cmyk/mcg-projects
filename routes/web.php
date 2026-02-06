@@ -7,6 +7,7 @@ use App\Http\Controllers\PasswordController;
 
 // Public routes
 Route::get('/', [ProjectController::class, 'showMap'])->name('home');
+Route::get('/debug-images', [\App\Http\Controllers\DebugController::class, 'debugImages']);
 
 // Auth routes
 Auth::routes();
