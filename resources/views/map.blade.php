@@ -439,6 +439,12 @@
             border-color: #3b82f6;
             background: #fff;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            padding-left: 1rem;
+        }
+        .search-input:focus ~ .search-icon {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
         }
         .search-clear {
             position: absolute;
@@ -615,8 +621,8 @@
                         </div>
                         <div class="search-container" id="search-section" style="display: none;">
                             <div class="search-wrapper">
-                                <i class="bi bi-search search-icon"></i>
                                 <input type="text" id="project-search" class="search-input" placeholder="Search projects..." autocomplete="off">
+                                <i class="bi bi-search search-icon"></i>
                                 <button id="clear-search" class="search-clear">
                                     <i class="bi bi-x-circle-fill"></i>
                                 </button>
