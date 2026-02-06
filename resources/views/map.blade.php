@@ -405,7 +405,7 @@
 
         /* Search Bar Styles */
         .search-container {
-            padding: 1rem 1.25rem;
+            padding: 0.75rem 1.25rem;
             background: #fff;
             border-bottom: 1px solid #f1f5f9;
         }
@@ -413,12 +413,17 @@
             position: relative;
             display: flex;
             align-items: center;
+            width: 100%;
         }
         .search-icon {
             position: absolute;
-            left: 1rem;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            pointer-events: none;
+            line-height: 1;
         }
         .search-input {
             width: 100%;
@@ -437,7 +442,9 @@
         }
         .search-clear {
             position: absolute;
-            right: 0.75rem;
+            right: 0.6rem;
+            top: 50%;
+            transform: translateY(-50%);
             background: none;
             border: none;
             color: #94a3b8;
@@ -446,6 +453,8 @@
             padding: 0.25rem;
             border-radius: 50%;
             transition: all 0.2s;
+            line-height: 1;
+            z-index: 5;
         }
         .search-clear:hover {
             background: #f1f5f9;
