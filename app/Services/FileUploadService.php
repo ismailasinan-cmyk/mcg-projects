@@ -16,7 +16,7 @@ class FileUploadService
      */
     public function uploadFile(UploadedFile $file, string $destinationPath): string
     {
-        return $file->store($destinationPath, 'public');
+        return $file->store($destinationPath);
     }
 
     /**
@@ -31,8 +31,8 @@ class FileUploadService
             return false;
         }
 
-        if (Storage::disk('public')->exists($path)) {
-            return Storage::disk('public')->delete($path);
+        if (Storage::exists($path)) {
+            return Storage::delete($path);
         }
 
         return false;

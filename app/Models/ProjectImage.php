@@ -19,12 +19,17 @@ class ProjectImage extends Model
 
         $path = ltrim($this->image_path, '/');
 
-        // If file exists in public/ (Git-committed legacy files)
+        // 1. If file exists in public/ (Git-committed legacy files)
         if (file_exists(public_path($path))) {
             return secure_asset($path);
         }
 
-        // Fallback to our proxy route at /storage/{path}
+        // 2. If using S3, return the S3 URL
+        if (config('filesystems.default') === 's3') {
+            return \Illuminate\Support\Facades\Storage::disk('s3')->url($path);
+        }
+
+        // 3. Fallback to our proxy route at /storage/{path}
         return secure_url('storage/' . $path);
     }
 
