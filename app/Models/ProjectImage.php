@@ -21,18 +21,12 @@ class ProjectImage extends Model
 
         // Check if file exists in the physical public directory (legacy/seed images)
         if (file_exists(public_path($path))) {
-            $url = asset($path);
-        } else {
-            // Assume it's in storage (new uploads)
-            $url = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+            return secure_asset($path);
         }
 
-        // Hard-force HTTPS in production to fix Mixed Content
-        if (config('app.env') === 'production') {
-            return str_replace('http://', 'https://', $url);
-        }
-
-        return $url;
+        // Fallback to storage - using secure_asset handles potential symlink issues better
+        // if the file is in public/storage, secure_asset('storage/'.$path) works perfectly.
+        return secure_asset('storage/' . $path);
     }
 
     public function project()

@@ -24,12 +24,11 @@ class DebugController extends Controller
             'test_file_in_storage' => Storage::disk('public')->exists($testPath),
             'model_logic_test' => (function($path) {
                 if (file_exists(public_path($path))) {
-                    $u = asset($path);
-                } else {
-                    $u = Storage::disk('public')->url($path);
+                    return secure_asset($path);
                 }
-                return str_replace('http://', 'https://', $u);
+                return secure_asset('storage/' . $path);
             })($testPath),
+            'public_dir_contents' => scandir(public_path()),
             'example_projects' => \App\Models\Project::with('images')->take(3)->get()->map(function($p) {
                 return [
                     'id' => $p->id,
