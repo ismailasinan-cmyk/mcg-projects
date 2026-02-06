@@ -29,14 +29,19 @@ class Project extends Model
         if (!$this->image) return null;
         
         $path = 'images/projects/' . $this->image;
+        $isProduction = config('app.env') === 'production';
         
-        // Check if file exists on the public disk (storage/app/public)
-        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+        // Check if file exists in the public directory directly
+        if (file_exists(public_path($path))) {
+            return $isProduction ? secure_asset($path) : asset($path);
         }
         
-        // Fallback to public asset (public/images/projects/...)
-        return asset($path);
+        // Otherwise assume it's in storage
+        if ($isProduction) {
+            return secure_url('storage/' . $path);
+        }
+
+        return asset('storage/' . $path);
     }
 
     // Relationship with project images

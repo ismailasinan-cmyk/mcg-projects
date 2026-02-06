@@ -19,13 +19,20 @@ class ProjectImage extends Model
 
         $path = ltrim($this->image_path, '/');
 
-        // Check if file exists on the public disk (storage/app/public)
-        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+        // Force HTTPS for all URLs in production
+        $isProduction = config('app.env') === 'production';
+        
+        // Check if file exists in the public directory directly
+        if (file_exists(public_path($path))) {
+            return $isProduction ? secure_asset($path) : asset($path);
         }
 
-        // Fallback to public asset (public/images/projects/...)
-        return asset($path);
+        // Otherwise assume it's in storage
+        if ($isProduction) {
+            return secure_url('storage/' . $path);
+        }
+
+        return asset('storage/' . $path);
     }
 
     public function project()
