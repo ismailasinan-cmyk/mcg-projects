@@ -403,6 +403,55 @@
             border-color: #0f172a;
         }
 
+        /* Search Bar Styles */
+        .search-container {
+            padding: 1rem 1.25rem;
+            background: #fff;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .search-clear {
+            position: absolute;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            display: none;
+            padding: 0.25rem;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        .search-clear:hover {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
         /* Dark Mode Overrides */
         [data-bs-theme="dark"] body {
             background-color: #0f172a;
@@ -433,9 +482,19 @@
         }
         [data-bs-theme="dark"] .sidebar-header,
         [data-bs-theme="dark"] .detail-row,
-        [data-bs-theme="dark"] .filter-container {
+        [data-bs-theme="dark"] .filter-container,
+        [data-bs-theme="dark"] .search-container {
             background-color: #1e293b;
             border-color: #334155;
+        }
+        [data-bs-theme="dark"] .search-input {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+        [data-bs-theme="dark"] .search-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
         }
         [data-bs-theme="dark"] .project-item h4,
         [data-bs-theme="dark"] .modal-title,
@@ -544,6 +603,15 @@
                         <div class="sidebar-header d-flex justify-content-between align-items-center">
                             <h5 class="fw-bold text-dark mb-0">Projects List</h5>
                             <span id="state-badge" class="badge bg-primary rounded-pill">Select a State</span>
+                        </div>
+                        <div class="search-container" id="search-section" style="display: none;">
+                            <div class="search-wrapper">
+                                <i class="bi bi-search search-icon"></i>
+                                <input type="text" id="project-search" class="search-input" placeholder="Search projects..." autocomplete="off">
+                                <button id="clear-search" class="search-clear">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </div>
                         </div>
                         <div id="status-filters" class="filter-container" style="display: none;">
                             <button class="filter-btn active" onclick="filterByStatus('all')">All</button>
@@ -675,6 +743,7 @@
         let myModal;
         let currentStateProjects = [];
         let currentStatusFilter = 'all';
+        let currentSearchQuery = '';
         let currentStateName = '';
 
         // Dark Mode Logic (Layout independent)
@@ -711,6 +780,28 @@
             // Load content first
             loadStatistics();
             loadMap();
+
+            // Search Logic
+            const searchInput = document.getElementById('project-search');
+            const clearBtn = document.getElementById('clear-search');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    currentSearchQuery = e.target.value.toLowerCase();
+                    clearBtn.style.display = currentSearchQuery.length > 0 ? 'block' : 'none';
+                    renderProjects(currentStatusFilter);
+                });
+            }
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    currentSearchQuery = '';
+                    clearBtn.style.display = 'none';
+                    searchInput.focus();
+                    renderProjects(currentStatusFilter);
+                });
+            }
 
             // Then try to init modal
             try {
@@ -984,13 +1075,14 @@
                 <div class="project-item skeleton-loader" style="pointer-events: none;">
                     <div class="skeleton mb-2" style="height: 20px; width: 70%;"></div>
                     <div class="skeleton mb-2" style="height: 12px; width: 40%;"></div>
-                    <div class="border-top pt-2 mt-2">
+                    <div class="border-top pt-2 mt-2 d-flex justify-content-end">
                         <div class="skeleton" style="height: 10px; width: 30%;"></div>
                     </div>
                 </div>
             `).join('');
             
             filters.style.display = 'none';
+            document.getElementById('search-section').style.display = 'block';
 
             fetch(`/api/projects?status=${status}`)
                 .then(r => r.json())
@@ -998,6 +1090,7 @@
                     currentStateProjects = projects;
                     if (projects.length > 0) {
                         // For global view, we don't show the secondary status filters to avoid confusion
+                        currentStatusFilter = 'all';
                         renderProjects('all'); 
                     } else {
                         listContainer.innerHTML = `
@@ -1027,13 +1120,14 @@
                 <div class="project-item skeleton-loader" style="pointer-events: none;">
                     <div class="skeleton mb-2" style="height: 20px; width: 70%;"></div>
                     <div class="skeleton mb-2" style="height: 12px; width: 40%;"></div>
-                    <div class="border-top pt-2 mt-2">
+                    <div class="border-top pt-2 mt-2 d-flex justify-content-end">
                         <div class="skeleton" style="height: 10px; width: 30%;"></div>
                     </div>
                 </div>
             `).join('');
             
             filters.style.display = 'none';
+            document.getElementById('search-section').style.display = 'block';
 
             fetch(`/api/projects/state/${state}`)
                 .then(r => r.json())
@@ -1041,6 +1135,7 @@
                     currentStateProjects = projects;
                     if (projects.length > 0) {
                         filters.style.display = 'flex';
+                        currentStatusFilter = 'all';
                         // Reset filter buttons
                         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                         document.querySelector('.filter-btn').classList.add('active');
@@ -1076,17 +1171,35 @@
         };
 
         function renderProjects(status) {
+            currentStatusFilter = status;
             const listContainer = document.getElementById('project-list');
-            const filtered = status === 'all' 
+            
+            let filtered = status === 'all' 
                 ? currentStateProjects 
                 : currentStateProjects.filter(p => p.status.toLowerCase() === status.toLowerCase());
 
+            // Apply search filter
+            if (currentSearchQuery) {
+                filtered = filtered.filter(p => 
+                    (p.name && p.name.toLowerCase().includes(currentSearchQuery)) || 
+                    (p.description && p.description.toLowerCase().includes(currentSearchQuery))
+                );
+            }
+
             if (filtered.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="text-center py-5">
-                        <i class="bi bi-filter text-muted opacity-50 mb-2" style="font-size: 1.5rem;"></i>
-                        <p class="text-muted small">No projects with status <strong>${status}</strong> found in ${currentStateName}.</p>
-                    </div>`;
+                if (currentSearchQuery) {
+                    listContainer.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="bi bi-search text-muted opacity-50 mb-2" style="font-size: 1.5rem;"></i>
+                            <p class="text-muted small">No projects matching "<strong>${currentSearchQuery}</strong>" found.</p>
+                        </div>`;
+                } else {
+                    listContainer.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="bi bi-filter text-muted opacity-50 mb-2" style="font-size: 1.5rem;"></i>
+                            <p class="text-muted small">No projects with status <strong>${status}</strong> found in ${currentStateName}.</p>
+                        </div>`;
+                }
                 return;
             }
 
@@ -1099,8 +1212,7 @@
                             <span class="status-badge status-${p.status} flex-shrink-0" style="font-size: 0.65rem; padding: 0.2rem 0.6rem;">${p.status}</span>
                         </div>
                         ${p.description ? `<div class="small text-muted mb-2"><i class="bi bi-justify-left me-1"></i>${p.description.substring(0, 60) + (p.description.length > 60 ? '...' : '')}</div>` : ''}
-                        <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
-                             <small class="text-muted" style="font-size: 0.7rem;">ID: #${p.id}</small>
+                        <div class="d-flex justify-content-end align-items-center mt-2 border-top pt-2">
                              <small class="text-primary fw-bold" style="font-size: 0.75rem;">View Details <i class="bi bi-arrow-right"></i></small>
                         </div>
                     </div>
