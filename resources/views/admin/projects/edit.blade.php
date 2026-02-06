@@ -153,7 +153,7 @@
                             <button type="button" class="btn btn-outline-primary btn-sm dashed-button w-100 py-2" onclick="addImageRow()">
                                 <i class="bi bi-plus-lg me-1"></i> Add Another Image
                             </button>
-                            <div class="form-text mt-2 small text-muted"><i class="bi bi-info-circle me-1"></i> Supported: JPG, PNG, GIF. Max 100MB each.</div>
+                            <div class="form-text mt-2 small text-muted"><i class="bi bi-info-circle me-1"></i> Supported: JPG, PNG, GIF. Max 2MB each (Total 10MB).</div>
                         </div>
 
                         <hr class="text-muted opacity-25 my-4">

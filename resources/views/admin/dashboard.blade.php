@@ -89,9 +89,18 @@
 
         <!-- Recent Projects -->
         <div class="card shadow-sm border-0 rounded-4 card-recent-projects overflow-hidden mb-5">
-            <div class="card-header border-bottom bg-white py-3 px-4 d-flex justify-content-between align-items-center">
+            <div class="card-header border-bottom bg-white py-3 px-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                 <h5 class="mb-0 fw-bold text-dark">Recent Activity</h5>
-                <a href="{{ route('admin.projects.index') }}" class="btn btn-sm btn-link text-decoration-none p-0 fw-bold">View All Projects <i class="bi bi-arrow-right ms-1"></i></a>
+                <div class="d-flex align-items-center gap-3">
+                    <form action="{{ route('admin.dashboard') }}" method="GET" class="search-box">
+                        <div class="input-group input-group-sm shadow-sm" style="width: 250px;">
+                            <span class="input-group-text bg-light border-end-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Search projects..." value="{{ $searchTerm ?? '' }}">
+                            <button class="btn btn-primary px-3" type="submit">Search</button>
+                        </div>
+                    </form>
+                    <a href="{{ route('admin.projects.index') }}" class="btn btn-sm btn-link text-decoration-none p-0 fw-bold">View All <i class="bi bi-arrow-right ms-1"></i></a>
+                </div>
             </div>
             
             <div class="card-body p-0" id="dashboard-projects-container">
