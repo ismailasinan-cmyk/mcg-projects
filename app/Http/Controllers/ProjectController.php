@@ -23,6 +23,23 @@ class ProjectController extends Controller
         return view('map');
     }
 
+    // API endpoint to get all projects (supports status filter)
+    public function getProjects(Request $request)
+    {
+        try {
+            $query = Project::with('images');
+            
+            if ($request->has('status') && $request->status !== 'all') {
+                $query->where('status', $request->status);
+            }
+            
+            $projects = $query->get();
+            return response()->json($projects);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     // API endpoint to get projects by state
     public function getByState($state)
     {

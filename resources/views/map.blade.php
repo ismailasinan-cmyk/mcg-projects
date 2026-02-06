@@ -159,6 +159,8 @@
         .stat-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+            cursor: pointer;
         }
 
         .stat-icon {
@@ -562,7 +564,7 @@
 
             <!-- Statistics Section -->
             <div class="stats-container">
-                <div class="stat-card">
+                <div class="stat-card" onclick="loadGlobalProjects('all')">
                     <div class="stat-icon bg-primary bg-opacity-10 text-primary">
                         <i class="bi bi-folder2-open"></i>
                     </div>
@@ -571,7 +573,7 @@
                         <p>Total Projects</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="loadGlobalProjects('ongoing')">
                     <div class="stat-icon bg-warning bg-opacity-10 text-warning">
                         <i class="bi bi-clock-history"></i>
                     </div>
@@ -580,7 +582,7 @@
                         <p>Ongoing</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="loadGlobalProjects('completed')">
                     <div class="stat-icon bg-success bg-opacity-10 text-success">
                         <i class="bi bi-check-circle"></i>
                     </div>
@@ -589,7 +591,7 @@
                         <p>Completed</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="loadGlobalProjects('suspended')">
                     <div class="stat-icon bg-danger bg-opacity-10 text-danger">
                         <i class="bi bi-pause-circle"></i>
                     </div>
@@ -598,7 +600,7 @@
                         <p>Suspended</p>
                     </div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="loadGlobalProjects('operation')">
                     <div class="stat-icon bg-info bg-opacity-10 text-info">
                         <i class="bi bi-gear-wide-connected"></i>
                     </div>
@@ -955,11 +957,71 @@
             });
         }
 
+        function loadGlobalProjects(status) {
+            currentStateName = status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1);
+            const listContainer = document.getElementById('project-list');
+            const filters = document.getElementById('status-filters');
+            const stateBadge = document.getElementById('state-badge');
+            
+            // Highlight active stat card (visually)
+            document.querySelectorAll('.stat-card').forEach(card => card.style.borderColor = '');
+            const activeCard = Array.from(document.querySelectorAll('.stat-card')).find(c => c.textContent.toLowerCase().includes(status.toLowerCase()));
+            if (activeCard) activeCard.style.borderColor = '#3b82f6';
+
+            // Reset map highlights
+            const paths = document.querySelectorAll('#nigeria-map path');
+            paths.forEach(p => {
+                const sum = (p.getAttribute('title') || p.getAttribute('id')).split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+                const colors = ['#dcfce7', '#fef9c3', '#fee2e2', '#dbeafe', '#f3e8ff', '#ffedd5', '#e0f2fe', '#fce7f3', '#ecfccb', '#f3f4f6'];
+                p.style.fill = colors[sum % colors.length];
+            });
+
+            stateBadge.textContent = currentStateName + ' Projects';
+            stateBadge.className = 'badge bg-dark rounded-pill';
+
+            // Show Skeleton Loader
+            listContainer.innerHTML = Array(3).fill(0).map(() => `
+                <div class="project-item skeleton-loader" style="pointer-events: none;">
+                    <div class="skeleton mb-2" style="height: 20px; width: 70%;"></div>
+                    <div class="skeleton mb-2" style="height: 12px; width: 40%;"></div>
+                    <div class="border-top pt-2 mt-2">
+                        <div class="skeleton" style="height: 10px; width: 30%;"></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            filters.style.display = 'none';
+
+            fetch(`/api/projects?status=${status}`)
+                .then(r => r.json())
+                .then(projects => {
+                    currentStateProjects = projects;
+                    if (projects.length > 0) {
+                        // For global view, we don't show the secondary status filters to avoid confusion
+                        renderProjects('all'); 
+                    } else {
+                        listContainer.innerHTML = `
+                            <div class="text-center py-5">
+                                <i class="bi bi-filter text-muted mb-2" style="font-size: 2rem;"></i>
+                                <h6 class="text-dark fw-bold">${currentStateName} Projects</h6>
+                                <p class="text-muted small">No projects found for this category.</p>
+                            </div>`;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    listContainer.innerHTML = '<div class="text-danger text-center small">Error loading projects.</div>';
+                });
+        }
+
         function loadProjectsByState(state) {
             currentStateName = state;
             const listContainer = document.getElementById('project-list');
             const filters = document.getElementById('status-filters');
             
+            // Reset stat card highlights
+            document.querySelectorAll('.stat-card').forEach(card => card.style.borderColor = '');
+
             // Show Skeleton Loader
             listContainer.innerHTML = Array(3).fill(0).map(() => `
                 <div class="project-item skeleton-loader" style="pointer-events: none;">
@@ -979,6 +1041,9 @@
                     currentStateProjects = projects;
                     if (projects.length > 0) {
                         filters.style.display = 'flex';
+                        // Reset filter buttons
+                        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                        document.querySelector('.filter-btn').classList.add('active');
                         renderProjects('all');
                     } else {
                         listContainer.innerHTML = `

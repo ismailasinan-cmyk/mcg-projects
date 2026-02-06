@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/projects/statistics', [ProjectController::class, 'getStatistics']);
 Route::get('/projects/states-with-projects', [ProjectController::class, 'getStatesWithProjects']);
 Route::get('/projects/state/{state}', [ProjectController::class, 'getByState']);
+Route::get('/projects', [ProjectController::class, 'getProjects']);
 
 // Wildcard LAST
 Route::get('/projects/{id}', [ProjectController::class, 'getProject']);
