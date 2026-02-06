@@ -22,20 +22,20 @@ class DebugController extends Controller
             'test_file_size' => File::exists(public_path($testPath)) ? File::size(public_path($testPath)) : 0,
             'test_file_perms' => File::exists(public_path($testPath)) ? substr(sprintf('%o', fileperms(public_path($testPath))), -4) : 'none',
             'test_file_in_storage' => Storage::disk('public')->exists($testPath),
-            'model_logic_test' => (function($path) {
-                if (file_exists(public_path($path))) {
-                    return secure_asset($path);
-                }
-                return secure_asset('storage/' . $path);
-            })($testPath),
             'public_dir_contents' => scandir(public_path()),
-            'example_projects' => \App\Models\Project::with('images')->take(3)->get()->map(function($p) {
+            'storage_dir_exists' => File::exists(storage_path('app/public')),
+            'storage_dir_contents' => File::exists(storage_path('app/public')) ? scandir(storage_path('app/public')) : 'dir_not_found',
+            'images_projects_dir_contents' => File::exists(storage_path('app/public/images/projects')) ? scandir(storage_path('app/public/images/projects')) : 'dir_not_found',
+            'example_projects' => \App\Models\Project::with('images')->whereHas('images')->get()->map(function($p) {
+                $firstImage = $p->images->first();
+                $imagePath = $firstImage ? ltrim($firstImage->image_path, '/') : null;
                 return [
                     'id' => $p->id,
                     'name' => $p->name,
-                    'image_url' => $p->image_url,
-                    'images_count' => $p->images->count(),
-                    'first_image_url' => $p->images->first()?->image_url,
+                    'db_image_path' => $imagePath,
+                    'exists_in_public' => $imagePath && File::exists(public_path($imagePath)),
+                    'exists_in_storage' => $imagePath && Storage::disk('public')->exists($imagePath),
+                    'final_url' => $p->image_url ?: ($firstImage ? $firstImage->image_url : null),
                 ];
             }),
             'server_protocol' => isset($_SERVER['HTTPS']) ? 'https' : 'http',
