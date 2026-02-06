@@ -19,6 +19,8 @@ class DebugController extends Controller
             'symlink_exists' => File::exists(public_path('storage')),
             'symlink_is_link' => is_link(public_path('storage')),
             'test_file_in_public' => File::exists(public_path($testPath)),
+            'test_file_size' => File::exists(public_path($testPath)) ? File::size(public_path($testPath)) : 0,
+            'test_file_perms' => File::exists(public_path($testPath)) ? substr(sprintf('%o', fileperms(public_path($testPath))), -4) : 'none',
             'test_file_in_storage' => Storage::disk('public')->exists($testPath),
             'generated_asset_url' => asset($testPath),
             'generated_storage_url' => Storage::disk('public')->url($testPath),
