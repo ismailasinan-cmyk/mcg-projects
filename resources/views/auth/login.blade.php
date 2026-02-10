@@ -70,7 +70,7 @@
                     </form>
                 </div>
                 <div class="card-footer bg-light border-0 text-center py-3">
-                    <p class="mb-0 text-muted small">Don't have an account? <a href="{{ route('register') }}" class="text-primary fw-bold text-decoration-none">Create Account</a></p>
+                    <p class="mb-0 text-muted small">Access restricted to authorized personnel only.</p>
                 </div>
             </div>
         </div>
