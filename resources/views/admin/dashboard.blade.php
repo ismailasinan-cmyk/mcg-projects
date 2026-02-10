@@ -85,6 +85,24 @@
                     </div>
                 </div>
             </div>
+            
+            @if(Auth::user()->isSuperAdmin())
+            <div class="col-md-6">
+                <div class="card stats-card card-primary h-100 shadow-sm rounded-4 border-0">
+                    <a href="{{ route('admin.users.index') }}" class="text-decoration-none">
+                        <div class="card-body p-2 d-flex align-items-center">
+                            <div class="flex-grow-1">
+                                <span class="text-muted text-uppercase fw-bold x-small letter-spacing-wide d-block mb-1" style="font-size: 0.65rem;">System</span>
+                                <h3 class="fw-bold text-primary mb-0">Manage Users</h3>
+                            </div>
+                            <div class="icon-box bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-people-fill fs-5"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Recent Projects -->
