@@ -10,7 +10,7 @@ Route::get('/', [ProjectController::class, 'showMap'])->name('home');
 Route::get('/storage/{path}', [\App\Http\Controllers\FileController::class, 'serve'])->where('path', '.*');
 
 // Auth routes
-Auth::routes();
+Auth::routes(['register' => false]);
 
 // Google Login Routes
 Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
@@ -53,4 +53,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Resource routes
     Route::resource('projects', ProjectController::class)->except(['show']);
     Route::resource('tracking', ProjectTrackingController::class)->except(['show']);
+
+    // User Management
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['show', 'update']);
+    Route::patch('/users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::patch('/users/{user}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
 });
