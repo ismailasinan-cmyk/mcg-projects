@@ -73,6 +73,13 @@
                                         <i class="bi bi-clock-history me-2 text-primary"></i> Activity Log
                                     </a>
                                     
+                                    @if(Auth::user()->isSuperAdmin())
+                                        <div class="dropdown-divider my-0"></div>
+                                        <a class="dropdown-item py-2" href="{{ route('admin.users.index') }}">
+                                            <i class="bi bi-people me-2 text-primary"></i> Users
+                                        </a>
+                                    @endif
+                                    
                                     <div class="dropdown-divider my-0"></div>
                                     
                                     <a class="dropdown-item py-2" href="{{ route('password.change') }}">
