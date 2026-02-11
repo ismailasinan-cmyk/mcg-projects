@@ -21,7 +21,12 @@
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center fw-bold text-white letter-spacing-tight" href="{{ url('/') }}">
                     <img src="{{ asset('images/logos/mcg-logo.png') }}" alt="MCG" height="36" class="me-2 bg-white rounded-circle p-1">
-                    MCG Projects
+                    MCG Projects 
+                    @auth
+                        <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">
+                            {{ Auth::user()->role }}
+                        </span>
+                    @endauth
                 </a>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

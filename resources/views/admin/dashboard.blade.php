@@ -16,6 +16,11 @@
                 <p class="text-muted mb-0">System performance and project distribution</p>
             </div>
             <div class="d-flex gap-2">
+                @if(Auth::user()->isSuperAdmin())
+                <a href="{{ route('admin.users.create') }}" class="btn btn-outline-primary px-4 rounded-3 shadow-sm">
+                    <i class="bi bi-person-plus me-2"></i>New User
+                </a>
+                @endif
                 <a href="{{ route('admin.projects.create') }}" class="btn btn-primary px-4 rounded-3 shadow-sm">
                     <i class="bi bi-plus-lg me-2"></i>New Project
                 </a>
