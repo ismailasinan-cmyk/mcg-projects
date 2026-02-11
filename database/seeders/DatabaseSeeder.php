@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        $this->call(ProjectSeeder::class);
+        $this->call([
+            SuperUserSeeder::class,
+            ProjectSeeder::class,
+        ]);
     }
 }

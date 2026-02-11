@@ -56,17 +56,7 @@
                             </button>
                         </div>
 
-                        <div class="position-relative text-center mb-4">
-                            <hr class="text-muted opacity-25">
-                            <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted small">OR</span>
-                        </div>
 
-                        <div class="d-grid">
-                            <a href="{{ route('auth.google') }}" class="btn btn-light btn-lg border shadow-sm d-flex align-items-center justify-content-center gap-2 font-medium">
-                                <i class="bi bi-google text-danger"></i> 
-                                <span class="text-dark small">Continue with Google</span>
-                            </a>
-                        </div>
                     </form>
                 </div>
                 <div class="card-footer bg-light border-0 text-center py-3">

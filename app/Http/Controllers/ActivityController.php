@@ -14,6 +14,10 @@ class ActivityController extends Controller
 
     public function index(Request $request)
     {
+        if (auth()->user()->isViewer()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $query = ActivityLog::with(['user', 'subject']);
 
         if ($request->has('search') && $request->search) {

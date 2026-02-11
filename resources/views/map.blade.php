@@ -580,11 +580,7 @@
                 <button id="theme-toggle" class="btn btn-link p-0 border-0 fs-5 text-muted" title="Toggle Theme">
                     <i class="bi bi-moon-stars"></i>
                 </button>
-                @guest
-                    <a href="{{ route('login') }}" class="btn btn-primary px-4 rounded-pill fw-bold shadow-sm">
-                        <i class="bi bi-lock-fill me-2"></i>Admin Login
-                    </a>
-                @else
+
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-primary px-4 rounded-pill fw-bold">
                         <i class="bi bi-speedometer2 me-2"></i>Dashboard
                     </a>
@@ -698,9 +694,12 @@
 
     <!-- Footer -->
     <footer>
-        <div class="container text-center">
-            <p class="text-muted small mb-0">&copy; {{ date('Y') }} Mutual Commitment Group. All rights reserved.</p>
-        </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="text-muted small mb-0">&copy; {{ date('Y') }} Mutual Commitment Group. All rights reserved.</p>
+                @guest
+                    <a href="{{ route('login') }}" class="text-muted small text-decoration-none hover-primary">Login</a>
+                @endguest
+            </div>
     </footer>
 
     <!-- Tooltip -->

@@ -74,9 +74,11 @@
                                     <a class="dropdown-item py-2" href="{{ route('admin.tracking.index') }}">
                                         <i class="bi bi-activity me-2 text-primary"></i> Tracking
                                     </a>
+                                    @if(!Auth::user()->isViewer())
                                     <a class="dropdown-item py-2" href="{{ route('admin.activity.index') }}">
                                         <i class="bi bi-clock-history me-2 text-primary"></i> Activity Log
                                     </a>
+                                    @endif
                                     
                                     @if(Auth::user()->isSuperAdmin())
                                         <div class="dropdown-divider my-0"></div>
