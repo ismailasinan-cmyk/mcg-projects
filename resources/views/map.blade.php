@@ -580,11 +580,11 @@
                 <button id="theme-toggle" class="btn btn-link p-0 border-0 fs-5 text-muted" title="Toggle Theme">
                     <i class="bi bi-moon-stars"></i>
                 </button>
-
+                @auth
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-primary px-4 rounded-pill fw-bold">
                         <i class="bi bi-speedometer2 me-2"></i>Dashboard
                     </a>
-                @endguest
+                @endauth
             </div>
         </div>
     </nav>
